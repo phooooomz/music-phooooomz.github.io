@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offline Music Helper</title>
+<style>
+body {
+  margin: 0; padding: 24px;
+  background: #10131b; color: white;
+  font-family: sans-serif;
+}
+main {
+  max-width: 500px; margin: 40px auto;
+  background: #1d2330; padding: 22px;
+  border-radius: 18px;
+}
+input, button {
+  box-sizing: border-box; width: 100%;
+  padding: 14px; margin-top: 12px;
+  border-radius: 10px; font-size: 16px;
+}
+input { background: #10131b; color: white;
+  border: 1px solid #586174; }
+button { background: #06b6d4;
+  color: #06131a; border: 0; font-weight: bold; }
+p { color: #c5ccda; line-height: 1.6; }
+</style>
+</head>
+<body>
+<main>
+  <h2>🎧 Offline Music Helper</h2>
+  <p>วางลิงก์ไฟล์เสียงที่เจ้าของอนุญาต
+  ให้ดาวน์โหลด เช่น MP3, M4A, OGG หรือ WAV</p>
+
+  <input id="url" type="url"
+    placeholder="https://example.com/song.mp3">
+
+  <button onclick="downloadMusic()">
+    เปิดลิงก์ดาวน์โหลด
+  </button>
+
+  <p id="message" role="status"></p>
+</main>
+
+<script>
+function downloadMusic() {
+  const input = document.getElementById("url");
+  const message = document.getElementById("message");
+
+  let url;
+  try {
+    url = new URL(input.value.trim());
+  } catch {
+    message.textContent = "กรุณาวาง URL ที่ถูกต้อง";
+    return;
+  }
+
+  if (url.protocol !== "https:") {
+    message.textContent = "รองรับเฉพาะลิงก์ HTTPS";
+    return;
+  }
+
+  if (!/\.(mp3|m4a|ogg|wav|flac)(?:$)/i.test(url.pathname)) {
+    message.textContent =
+      "ลิงก์นี้ไม่ใช่ลิงก์ไฟล์เสียงโดยตรง " +
+      "โปรดใช้ปุ่มดาวน์โหลดจากเว็บไซต์ต้นทาง";
+    return;
+  }
+
+  message.textContent =
+    "กำลังเปิดลิงก์ไฟล์เสียง หากไม่ดาวน์โหลด " +
+    "ให้ตรวจสอบตัวเลือกดาวน์โหลดของเว็บไซต์ต้นทาง";
+
+  window.open(url.href, "_blank", "noopener");
+}
+</script>
+</body>
+</html>
